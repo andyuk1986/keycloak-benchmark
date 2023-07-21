@@ -34,7 +34,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-default-region: ${{ vars.AWS_DEFAULT_REGION }}
           rosa-token: ${{ secrets.ROSA_TOKEN }}
-      - name: Create Infinispan deployment
+      - name: Delete Infinispan deployment
         uses: ./.github/actions/infinispan-delete-deployment
         with:
           cluster1: ${{ inputs.clusterName1 }}
