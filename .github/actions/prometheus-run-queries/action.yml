@@ -1,0 +1,22 @@
+name: Run Prometheus Queries
+description: Run Prometheus Queries
+
+inputs:
+  runCpuUsageSec:
+    description: 'Identifies if "CPU usage per sec" query should be run.'
+    boolean: true
+    default: false
+
+runs:
+  using: composite
+  steps:
+    - id: cpu-usage-second-query
+      name: CPU Usage Per Sec
+      shell: bash
+      run: |
+        if [[ ${{ inputs.runCpuUsageSec }} == true ]]; then
+          oc exec -n openshift-monitoring prometheus-k8s-0 -c prometheus  \
+          -it curl http://127.0.0.1:9090/api/v1/query?query=sum%28irate%28container_cpu_usage_seconds_total%7Bjob%3D%22kubelet%22%2C+namespace%3D%22runner-keycloak%22%2Ccontainer%21%3D%22%22%7D%5B2m0s%5D%29%29+without+%28cpu%29
+          \ | python -m json.tool > query_result.json
+        fi
+
