@@ -1,0 +1,469 @@
+{
+  "uuid": "dd33498d-12dd-4fcc-8b10-f2162279b7f3",
+  "name": "Scenario 'keycloak.scenario.authentication.AuthorizationCode' with 400 users-per-sec",
+  "grafana_input": {
+    "start": {
+      "epoch_seconds": 1691397553,
+      "iso": "2023-08-07T08:39:13+00:00"
+    },
+    "end": {
+      "epoch_seconds": 1691397622,
+      "iso": "2023-08-07T08:40:22+00:00"
+    },
+    "input": {
+      "scenario": "keycloak.scenario.authentication.AuthorizationCode",
+      "unit": "users-per-sec",
+      "value": 400,
+      "config": "-Drealm-name=realm-0 -Dusers-per-realm=500"
+    }
+  },
+  "grafana_output": {
+    "stats": {
+      "type": "GROUP",
+      "name": "Global Information",
+      "path": "",
+      "pathFormatted": "group_missing-name-b06d1",
+      "stats": {
+        "name": "Global Information",
+        "numberOfRequests": {
+          "total": 100000,
+          "ok": 100000,
+          "ko": 0
+        },
+        "minResponseTime": {
+          "total": 120,
+          "ok": 120,
+          "ko": 0
+        },
+        "maxResponseTime": {
+          "total": 778,
+          "ok": 778,
+          "ko": 0
+        },
+        "meanResponseTime": {
+          "total": 268,
+          "ok": 268,
+          "ko": 0
+        },
+        "standardDeviation": {
+          "total": 123,
+          "ok": 123,
+          "ko": 0
+        },
+        "percentiles1": {
+          "total": 231,
+          "ok": 231,
+          "ko": 0
+        },
+        "percentiles2": {
+          "total": 381,
+          "ok": 380,
+          "ko": 0
+        },
+        "percentiles3": {
+          "total": 490,
+          "ok": 490,
+          "ko": 0
+        },
+        "percentiles4": {
+          "total": 578,
+          "ok": 578,
+          "ko": 0
+        },
+        "group1": {
+          "name": "t < 800 ms",
+          "count": 100000,
+          "percentage": 100
+        },
+        "group2": {
+          "name": "800 ms < t < 1200 ms",
+          "count": 0,
+          "percentage": 0
+        },
+        "group3": {
+          "name": "t > 1200 ms",
+          "count": 0,
+          "percentage": 0
+        },
+        "group4": {
+          "name": "failed",
+          "count": 0,
+          "percentage": 0
+        },
+        "meanNumberOfRequestsPerSecond": {
+          "total": 1515.1515151515152,
+          "ok": 1515.1515151515152,
+          "ko": 0
+        }
+      },
+      "contents": {
+        "req_browser-to-log--963e6": {
+          "type": "REQUEST",
+          "name": "Browser to Log In Endpoint",
+          "path": "Browser to Log In Endpoint",
+          "pathFormatted": "req_browser-to-log--963e6",
+          "stats": {
+            "name": "Browser to Log In Endpoint",
+            "numberOfRequests": {
+              "total": 25000,
+              "ok": 25000,
+              "ko": 0
+            },
+            "minResponseTime": {
+              "total": 356,
+              "ok": 356,
+              "ko": 0
+            },
+            "maxResponseTime": {
+              "total": 778,
+              "ok": 778,
+              "ko": 0
+            },
+            "meanResponseTime": {
+              "total": 435,
+              "ok": 435,
+              "ko": 0
+            },
+            "standardDeviation": {
+              "total": 63,
+              "ok": 63,
+              "ko": 0
+            },
+            "percentiles1": {
+              "total": 408,
+              "ok": 408,
+              "ko": 0
+            },
+            "percentiles2": {
+              "total": 469,
+              "ok": 469,
+              "ko": 0
+            },
+            "percentiles3": {
+              "total": 567,
+              "ok": 567,
+              "ko": 0
+            },
+            "percentiles4": {
+              "total": 635,
+              "ok": 635,
+              "ko": 0
+            },
+            "group1": {
+              "name": "t < 800 ms",
+              "count": 25000,
+              "percentage": 100
+            },
+            "group2": {
+              "name": "800 ms < t < 1200 ms",
+              "count": 0,
+              "percentage": 0
+            },
+            "group3": {
+              "name": "t > 1200 ms",
+              "count": 0,
+              "percentage": 0
+            },
+            "group4": {
+              "name": "failed",
+              "count": 0,
+              "percentage": 0
+            },
+            "meanNumberOfRequestsPerSecond": {
+              "total": 378.7878787878788,
+              "ok": 378.7878787878788,
+              "ko": 0
+            }
+          }
+        },
+        "req_browser-posts-c-bbe37": {
+          "type": "REQUEST",
+          "name": "Browser posts correct credentials",
+          "path": "Browser posts correct credentials",
+          "pathFormatted": "req_browser-posts-c-bbe37",
+          "stats": {
+            "name": "Browser posts correct credentials",
+            "numberOfRequests": {
+              "total": 25000,
+              "ok": 25000,
+              "ko": 0
+            },
+            "minResponseTime": {
+              "total": 152,
+              "ok": 152,
+              "ko": 0
+            },
+            "maxResponseTime": {
+              "total": 668,
+              "ok": 668,
+              "ko": 0
+            },
+            "meanResponseTime": {
+              "total": 249,
+              "ok": 249,
+              "ko": 0
+            },
+            "standardDeviation": {
+              "total": 80,
+              "ok": 80,
+              "ko": 0
+            },
+            "percentiles1": {
+              "total": 226,
+              "ok": 226,
+              "ko": 0
+            },
+            "percentiles2": {
+              "total": 299,
+              "ok": 299,
+              "ko": 0
+            },
+            "percentiles3": {
+              "total": 411,
+              "ok": 411,
+              "ko": 0
+            },
+            "percentiles4": {
+              "total": 487,
+              "ok": 487,
+              "ko": 0
+            },
+            "group1": {
+              "name": "t < 800 ms",
+              "count": 25000,
+              "percentage": 100
+            },
+            "group2": {
+              "name": "800 ms < t < 1200 ms",
+              "count": 0,
+              "percentage": 0
+            },
+            "group3": {
+              "name": "t > 1200 ms",
+              "count": 0,
+              "percentage": 0
+            },
+            "group4": {
+              "name": "failed",
+              "count": 0,
+              "percentage": 0
+            },
+            "meanNumberOfRequestsPerSecond": {
+              "total": 378.7878787878788,
+              "ok": 378.7878787878788,
+              "ko": 0
+            }
+          }
+        },
+        "req_exchange-code-c0694": {
+          "type": "REQUEST",
+          "name": "Exchange Code",
+          "path": "Exchange Code",
+          "pathFormatted": "req_exchange-code-c0694",
+          "stats": {
+            "name": "Exchange Code",
+            "numberOfRequests": {
+              "total": 25000,
+              "ok": 25000,
+              "ko": 0
+            },
+            "minResponseTime": {
+              "total": 123,
+              "ok": 123,
+              "ko": 0
+            },
+            "maxResponseTime": {
+              "total": 616,
+              "ok": 616,
+              "ko": 0
+            },
+            "meanResponseTime": {
+              "total": 192,
+              "ok": 192,
+              "ko": 0
+            },
+            "standardDeviation": {
+              "total": 70,
+              "ok": 70,
+              "ko": 0
+            },
+            "percentiles1": {
+              "total": 160,
+              "ok": 160,
+              "ko": 0
+            },
+            "percentiles2": {
+              "total": 231,
+              "ok": 231,
+              "ko": 0
+            },
+            "percentiles3": {
+              "total": 334,
+              "ok": 334,
+              "ko": 0
+            },
+            "percentiles4": {
+              "total": 404,
+              "ok": 404,
+              "ko": 0
+            },
+            "group1": {
+              "name": "t < 800 ms",
+              "count": 25000,
+              "percentage": 100
+            },
+            "group2": {
+              "name": "800 ms < t < 1200 ms",
+              "count": 0,
+              "percentage": 0
+            },
+            "group3": {
+              "name": "t > 1200 ms",
+              "count": 0,
+              "percentage": 0
+            },
+            "group4": {
+              "name": "failed",
+              "count": 0,
+              "percentage": 0
+            },
+            "meanNumberOfRequestsPerSecond": {
+              "total": 378.7878787878788,
+              "ok": 378.7878787878788,
+              "ko": 0
+            }
+          }
+        },
+        "req_browser-logout-3ac37": {
+          "type": "REQUEST",
+          "name": "Browser logout",
+          "path": "Browser logout",
+          "pathFormatted": "req_browser-logout-3ac37",
+          "stats": {
+            "name": "Browser logout",
+            "numberOfRequests": {
+              "total": 25000,
+              "ok": 25000,
+              "ko": 0
+            },
+            "minResponseTime": {
+              "total": 120,
+              "ok": 120,
+              "ko": 0
+            },
+            "maxResponseTime": {
+              "total": 577,
+              "ok": 577,
+              "ko": 0
+            },
+            "meanResponseTime": {
+              "total": 198,
+              "ok": 198,
+              "ko": 0
+            },
+            "standardDeviation": {
+              "total": 77,
+              "ok": 77,
+              "ko": 0
+            },
+            "percentiles1": {
+              "total": 169,
+              "ok": 169,
+              "ko": 0
+            },
+            "percentiles2": {
+              "total": 242,
+              "ok": 242,
+              "ko": 0
+            },
+            "percentiles3": {
+              "total": 353,
+              "ok": 353,
+              "ko": 0
+            },
+            "percentiles4": {
+              "total": 425,
+              "ok": 425,
+              "ko": 0
+            },
+            "group1": {
+              "name": "t < 800 ms",
+              "count": 25000,
+              "percentage": 100
+            },
+            "group2": {
+              "name": "800 ms < t < 1200 ms",
+              "count": 0,
+              "percentage": 0
+            },
+            "group3": {
+              "name": "t > 1200 ms",
+              "count": 0,
+              "percentage": 0
+            },
+            "group4": {
+              "name": "failed",
+              "count": 0,
+              "percentage": 0
+            },
+            "meanNumberOfRequestsPerSecond": {
+              "total": 378.7878787878788,
+              "ok": 378.7878787878788,
+              "ko": 0
+            }
+          }
+        }
+      }
+    }
+  },
+  "system_under_test": {
+    "rosa": {
+      "creation_timestamp": "2023-08-07T04:24:39Z",
+      "flavour": {
+        "href": "/api/clusters_mgmt/v1/flavours/osd-4",
+        "id": "osd-4",
+        "kind": "FlavourLink"
+      },
+      "multi_az": false,
+      "nodes": {
+        "availability_zones": [
+          "eu-central-1a"
+        ],
+        "compute": 2,
+        "compute_machine_type": {
+          "href": "/api/clusters_mgmt/v1/machine_types/m5.xlarge",
+          "id": "m5.xlarge",
+          "kind": "MachineTypeLink"
+        },
+        "compute_root_volume": {
+          "aws": {}
+        },
+        "infra": 2,
+        "infra_machine_type": {
+          "href": "/api/clusters_mgmt/v1/machine_types/r5.xlarge",
+          "id": "r5.xlarge",
+          "kind": "MachineTypeLink"
+        },
+        "master": 3
+      },
+      "openshift_version": "4.13.4",
+      "region": {
+        "href": "/api/clusters_mgmt/v1/cloud_providers/aws/regions/eu-central-1",
+        "id": "eu-central-1",
+        "kind": "CloudRegionLink"
+      },
+      "version": {
+        "available_upgrades": [
+          "4.13.5",
+          "4.13.6"
+        ],
+        "channel_group": "stable",
+        "end_of_life_timestamp": "2024-09-17T00:00:00Z",
+        "href": "/api/clusters_mgmt/v1/versions/openshift-v4.13.4",
+        "id": "openshift-v4.13.4",
+        "kind": "Version",
+        "raw_id": "4.13.4"
+      }
+    }
+  }
+}
