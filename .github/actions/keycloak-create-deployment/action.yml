@@ -37,9 +37,8 @@ inputs:
   kcHealthHostname:
     description: 'The hostname used to create a health Route'
   deployMonitoring:
-      description: 'Boolean showing if monitoring should be deployed'
-      type: boolean
-      default: false
+    description: 'Boolean showing if monitoring should be deployed'
+    default: 'false'
 
 runs:
   using: "composite"
@@ -68,11 +67,7 @@ runs:
         KC_HEALTH_HOSTNAME: ${{ inputs.kcHealthHostname }}
 
     - id: install_keycloak_monitoring
+      if: ${{ inputs.deployMonitoring }}
       shell: bash
-      run: |
-        if [[ ${{ inputs.deployMonitoring }} == true ]]; then
-          task monitoring
-        else
-          echo "Nothing should be done. Passed parameter is ${{ inputs.deployMonitoring }}."
-        fi
+      run: task monitoring
       working-directory: provision/openshift
