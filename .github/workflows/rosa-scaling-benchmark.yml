@@ -47,8 +47,8 @@ on:
 concurrency: cluster_${{ github.event.inputs.clusterName || format('gh-{0}', github.repository_owner) }}
 
 env:
-  PROJECT_PREFIX: runner- # same as default
-  PROJECT: runner-keycloak
+  PROJECT_PREFIX: kamesh- # same as default
+  PROJECT: kamesh-keycloak
   KC_CPU_REQUESTS: 6
   KC_INSTANCES: 3
   KC_DISABLE_STICKY_SESSION: true
