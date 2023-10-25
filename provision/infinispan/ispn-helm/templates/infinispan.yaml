@@ -36,6 +36,8 @@ metadata:
     infinispan.org/monitoring: 'true' # <2>
 spec:
   replicas: {{ .Values.replicas }}
+  jmx:
+    enabled: true
 # end::infinispan-single[]
 # end::infinispan-crossdc[]
   configMapName: "cluster-config"
