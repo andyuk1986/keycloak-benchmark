@@ -908,4 +908,4 @@ tasks:
         - ROSA_CLUSTER_NAME
     cmds:
       - echo "Deleting configmap with environment data."
-      - KUBECONFIG="{{.ISPN_DIR}}/.task/kubecfg/{{.ROSA_CLUSTER_NAME}}" oc -n {{.KC_NAMESPACE_PREFIX}}keycloak delete configmap env-config || (kubectl -n {{.KC_NAMESPACE_PREFIX}}keycloak delete configmap env-config)
+      - bash -c "kubectl -n {{.KC_NAMESPACE_PREFIX}}keycloak delete configmap env-config || exit 0"
