@@ -64,6 +64,7 @@ tasks:
       - echo {{.KC_NAMESPACE_PREFIX}} > .task/var-KC_NAMESPACE_PREFIX
       - echo {{.KC_ADMIN_PASSWORD}} > .task/var-KC_ADMIN_PASSWORD
       - echo {{.KC_ISPN_NAMESPACE}} > .task/var-KC_ISPN_NAMESPACE
+      - KUBECONFIG=".task/{{.ROSA_CLUSTER_NAME}}" CLUSTER_NAME="{{.ROSA_CLUSTER_NAME}}" ../aws/rosa_oc_login.sh
     run: once
     sources:
       - .task/subtask-{{.TASK}}.yaml
@@ -233,6 +234,8 @@ tasks:
       - task: keycloak:install-keycloak-operator
         vars:
           NAMESPACE: "{{.KC_NAMESPACE_PREFIX}}keycloak"
+          KUBECONFIG:
+            sh: readlink -f ".task/{{.ROSA_CLUSTER_NAME}}"
       - >
         helm upgrade --install keycloak --namespace {{.KC_NAMESPACE_PREFIX}}keycloak
         --set hostname={{.KC_HOSTNAME_SUFFIX}}

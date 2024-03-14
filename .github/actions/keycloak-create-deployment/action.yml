@@ -34,6 +34,8 @@ inputs:
     description: 'The hostname to be used by Keycloak'
   kcHealthHostname:
     description: 'The hostname used to create a health Route'
+  clusterName:
+    description: 'The name of the cluster.'
 
 runs:
   using: "composite"
@@ -59,3 +61,4 @@ runs:
         KC_DATABASE_URL: ${{ inputs.databaseUrl }}
         KC_HOSTNAME_OVERRIDE: ${{ inputs.kcHostnameOverride }}
         KC_HEALTH_HOSTNAME: ${{ inputs.kcHealthHostname }}
+        ROSA_CLUSTER_NAME: ${{ inputs.clusterName }}

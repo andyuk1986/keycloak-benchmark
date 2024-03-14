@@ -90,8 +90,8 @@ on:
 concurrency: cluster_${{ github.event.inputs.clusterName || format('gh-{0}', github.repository_owner) }}
 
 env:
-  PROJECT_PREFIX: runner- # same as default
-  PROJECT: runner-keycloak
+  PROJECT_PREFIX: amanukya- # same as default
+  PROJECT: amanukya-keycloak
   KC_CPU_REQUESTS: 6
   KC_INSTANCES: 3
   KC_DISABLE_STICKY_SESSION: true
@@ -162,6 +162,7 @@ jobs:
           podCpuRequests: ${{ env.KC_CPU_REQUESTS }}
           podMemoryRequests: ${{ env.KC_MEMORY_REQUESTS_MB }}
           podMemoryLimit: ${{ env.KC_MEMORY_LIMITS_MB }}
+          clusterName: ${{ inputs.clusterName || format('gh-{0}', github.repository_owner) }}
 
       - name: Get URLs
         uses: ./.github/actions/get-keycloak-url
