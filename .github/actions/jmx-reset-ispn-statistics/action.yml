@@ -1,0 +1,96 @@
+name: Execute JMX Operation
+description: Execute JMX Operation with provided URL
+
+inputs:
+  project:
+    description: OpenShift project where Keycloak is running
+    required: true
+  cacheName:
+    description: The name of the cache for which the statistics should be reset.
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - id: retrieve-jmx-rest-client-url
+      if: ${{ env.JMX_REST_CLIENT_URL == '' }}
+      shell: bash
+      # language=bash
+      run: |
+        JMX_REST_CLIENT_URL=$(kubectl get routes -n "${{ inputs.project }}"  -l app=jmxrestclient -o jsonpath='{.items[*].spec.host}')
+        echo "JMX_REST_CLIENT_URL=$JMX_REST_CLIENT_URL" >> "$GITHUB_ENV"
+
+    - id: retrieve-and-store-jmx-credentials
+      if: ${{ env.ADMIN_PASSWORD == '' }}
+      shell: bash
+      # language=bash
+      run: |
+        username=$(kubectl get secret infinispan-generated-operator-secret -n "${{ inputs.project }}" -o jsonpath="{.data.identities\.yaml}" | base64 --decode | grep username: | awk '{print $3}')
+        pass=$(kubectl get secret infinispan-generated-operator-secret -n "${{ inputs.project }}" -o jsonpath="{.data.identities\.yaml}" | base64 --decode | grep password: | awk '{print $2}')
+        echo "::add-mask::$username"
+        echo "::add-mask::$pass"
+        echo "JMX_USERNAME=$username" >> $GITHUB_ENV
+        echo "JMX_PASSWORD=$pass" >> $GITHUB_ENV
+
+    - id: view-mbeans
+      shell: bash
+      # language=bash
+      run: |
+        readarray -t ipArr < <(oc get pod --selector=app=infinispan-pod -n "${{ inputs.project }}" -o json | jq '.items[] | .status.podIP')
+        for i in "${ipArr[@]}"
+        do
+        #Removing surrounding quotes from the gained IP address
+        ip=$(sed -e 's/^"//' -e 's/"$//' <<<"$i")
+        #Replacing dots with dashes in IP for forming JMX url.
+        finalIp="${ip//./-}"
+        #Forming JMX service URL
+        podJmxUrl="service:jmx:rmi:///jndi/rmi://${finalIp}.${{ inputs.project }}.pod:9999/jmxrmi"
+        curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST "${JMX_REST_CLIENT_URL}/logall" \
+              --data "{\"jmxServiceUrl\" : \"${podJmxUrl}\", \"userName\": \"${JMX_USERNAME}\", \"password\" : \"${JMX_PASSWORD}\"}"
+        done
+      env:
+        JMX_REST_CLIENT_URL: ${{ env.JMX_REST_CLIENT_URL }}
+        JMX_USERNAME: ${{ env.JMX_USERNAME }}
+        JMX_PASSWORD: ${{ env.JMX_PASSWORD }}
+
+    - id: get-attribute-value
+      shell: bash
+      # language=bash
+      run: |
+        readarray -t ipArr < <(oc get pod --selector=app=infinispan-pod -n "${{ inputs.project }}" -o json | jq '.items[] | .status.podIP')
+        for i in "${ipArr[@]}"
+        do
+        #Removing surrounding quotes from the gained IP address
+        ip=$(sed -e 's/^"//' -e 's/"$//' <<<"$i")
+        #Replacing dots with dashes in IP for forming JMX url.
+        finalIp="${ip//./-}"
+        #Forming JMX service URL
+        podJmxUrl="service:jmx:rmi:///jndi/rmi://${finalIp}.${{ inputs.project }}.pod:9999/jmxrmi"
+        curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST "${JMX_REST_CLIENT_URL}/getAttribute" \
+              --data "{\"jmxServiceUrl\" : \"${podJmxUrl}\", \"query\" : \"Infinispan:type=Cache,name=\\\"${{ inputs.cacheName }}\\\",manager=\\\"default\\\",component=RpcManager\", \"targetName\" : \"averageXSiteReplicationTime\", \"userName\": \"${JMX_USERNAME}\", \"password\" : \"${JMX_PASSWORD}\"}"
+        done
+      env:
+        JMX_REST_CLIENT_URL: ${{ env.JMX_REST_CLIENT_URL }}
+        JMX_USERNAME: ${{ env.JMX_USERNAME }}
+        JMX_PASSWORD: ${{ env.JMX_PASSWORD }}
+
+    - id: reset-statistics
+      shell: bash
+      # language=bash
+      run: |
+        readarray -t ipArr < <(oc get pod --selector=app=infinispan-pod -n "${{ inputs.project }}" -o json | jq '.items[] | .status.podIP')
+        for i in "${ipArr[@]}"
+        do
+        #Removing surrounding quotes from the gained IP address
+        ip=$(sed -e 's/^"//' -e 's/"$//' <<<"$i")
+        #Replacing dots with dashes in IP for forming JMX url.
+        finalIp="${ip//./-}"
+        #Forming JMX service URL
+        podJmxUrl="service:jmx:rmi:///jndi/rmi://${finalIp}.${{ inputs.project }}.pod:9999/jmxrmi"
+        curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST "${JMX_REST_CLIENT_URL}/performJmxOperation" \
+              --data "{\"jmxServiceUrl\" : \"${podJmxUrl}\", \"query\" : \"Infinispan:type=Cache,name=\\\"${{ inputs.cacheName }}\\\",manager=\\\"default\\\",component=RpcManager\", \"targetName\" : \"resetStatistics\", \"userName\": \"${JMX_USERNAME}\", \"password\" : \"${JMX_PASSWORD}\"}"
+        done
+      env:
+        JMX_REST_CLIENT_URL: ${{ env.JMX_REST_CLIENT_URL }}
+        JMX_USERNAME: ${{ env.JMX_USERNAME }}
+        JMX_PASSWORD: ${{ env.JMX_PASSWORD }}

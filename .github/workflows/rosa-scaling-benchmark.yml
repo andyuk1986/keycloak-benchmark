@@ -216,6 +216,12 @@ jobs:
           runMemoryUsageTotal: true
           output: memory_create_sessions
 
+      - name: Cleaning ISPN cache statistics before test run
+        uses: ./.github/actions/jmx-reset-ispn-statistics
+        with:
+          project: runner-keycloak
+          cacheName: sessions(dist_sync)
+
       - name: Testing memory for creating sessions
         id: kcb-authorization-code-1
         run: >
@@ -265,6 +271,12 @@ jobs:
           runCpuSecsUtil: true
           output: user_logins_vCpu
 
+      - name: Cleaning ISPN cache statistics before test run
+        uses: ./.github/actions/jmx-reset-ispn-statistics
+        with:
+          project: runner-keycloak
+          cacheName: sessions(dist_sync)
+
       - name: Testing CPU usage for user logins
         id: kcb-authorization-code-2
         run: >
@@ -307,6 +319,12 @@ jobs:
           project: ${{ env.PROJECT }}
           runCpuSecsUtil: true
           output: client_credential_grants_vCpu
+
+      - name: Cleaning ISPN cache statistics before test run
+        uses: ./.github/actions/jmx-reset-ispn-statistics
+        with:
+          project: runner-keycloak
+          cacheName: sessions(dist_sync)
 
       - name: Testing CPU usage for client credential grants
         id: kcb-client-secret

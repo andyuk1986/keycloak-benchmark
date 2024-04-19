@@ -24,6 +24,9 @@ data:
           namesAsTags: true
           gauges: true
           histograms: {{ .Values.metrics.histograms }}
+        jmx:
+          enabled: true
+          domain: Infinispan
       server:
         endpoints:
           - securityRealm: default

@@ -1,0 +1,45 @@
+name: Test JMX Operations
+
+on:
+  workflow_call:
+    inputs:
+      clusterName:
+        description: 'Name of the cluster'
+        type: string
+
+  workflow_dispatch:
+    inputs:
+      clusterName:
+        description: 'Name of the cluster'
+        type: string
+
+env:
+  REGION: ${{ github.event.inputs.region || vars.AWS_DEFAULT_REGION }}
+
+jobs:
+
+  checkout:
+    name: Test JMX Ops
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup ROSA CLI
+        uses: ./.github/actions/rosa-cli-setup
+        with:
+          aws-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-default-region: ${{ vars.AWS_DEFAULT_REGION }}
+          rosa-token: ${{ secrets.ROSA_TOKEN }}
+
+      - name: Login to OpenShift cluster
+        uses: ./.github/actions/oc-keycloak-login
+        with:
+          clusterName: ${{ inputs.clusterName || format('gh-{0}', github.repository_owner) }}
+
+      - name: JMX Operation test
+        uses: ./.github/actions/jmx-reset-ispn-statistics
+        with:
+          project: runner-keycloak
+          cacheName: sessions(dist_sync)

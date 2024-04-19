@@ -372,6 +372,12 @@ tasks:
       - task: create-env-configmap
         vars:
           ROSA_CLUSTER_NAME: "{{.ROSA_CLUSTER_NAME_2}}"
+      - task: create-jmx-rest-client-app
+        vars:
+          ROSA_CLUSTER_NAME: "{{.ROSA_CLUSTER_NAME_1}}"
+      - task: create-jmx-rest-client-app
+        vars:
+          ROSA_CLUSTER_NAME: "{{.ROSA_CLUSTER_NAME_2}}"
 
   undeploy:
     desc: "Undeploy Infinispan and Keycloak in a Cross-Site deployment using ROSA clusters"
@@ -404,14 +410,20 @@ tasks:
       - task: uninstall-infinispan
         vars:
           ROSA_CLUSTER_NAME: "{{.ROSA_CLUSTER_NAME_1}}"
-      - task: undeploy-route53-failover-lambda
-      - task: route53-failback
-        vars:
-          WAIT: 0
+#      - task: undeploy-route53-failover-lambda
+#      - task: route53-failback
+#        vars:
+#          WAIT: 0
       - task: delete-env-configmap
         vars:
           ROSA_CLUSTER_NAME: "{{.ROSA_CLUSTER_NAME_1}}"
       - task: delete-env-configmap
+        vars:
+          ROSA_CLUSTER_NAME: "{{.ROSA_CLUSTER_NAME_2}}"
+      - task: delete-jmx-rest-client-app
+        vars:
+          ROSA_CLUSTER_NAME: "{{.ROSA_CLUSTER_NAME_1}}"
+      - task: delete-jmx-rest-client-app
         vars:
           ROSA_CLUSTER_NAME: "{{.ROSA_CLUSTER_NAME_2}}"
 
@@ -896,5 +908,32 @@ tasks:
     cmds:
       - echo "Deleting configmap with environment data."
       - KUBECONFIG="{{.ISPN_DIR}}/.task/kubecfg/{{.ROSA_CLUSTER_NAME}}" kubectl -n {{.KC_NAMESPACE_PREFIX}}keycloak delete configmap env-config --ignore-not-found
+    preconditions:
+      - test -f "{{.ISPN_DIR}}/.task/kubecfg/{{.ROSA_CLUSTER_NAME}}"
+
+  create-jmx-rest-client-app:
+    internal: true
+    requires:
+      vars:
+        - ROSA_CLUSTER_NAME
+    cmds:
+      - echo "Creating JMX Rest Client application"
+      - mvn clean package -f ../../jmx-rest-client
+      - KUBECONFIG="{{.ISPN_DIR}}/.task/kubecfg/{{.ROSA_CLUSTER_NAME}}" oc new-build --name jmxrestclient --binary -n {{.KC_NAMESPACE_PREFIX}}keycloak
+      - KUBECONFIG="{{.ISPN_DIR}}/.task/kubecfg/{{.ROSA_CLUSTER_NAME}}" oc start-build jmxrestclient --from-dir=../../jmx-rest-client/ --follow --wait -n {{.KC_NAMESPACE_PREFIX}}keycloak
+      - KUBECONFIG="{{.ISPN_DIR}}/.task/kubecfg/{{.ROSA_CLUSTER_NAME}}" oc new-app jmxrestclient -n {{.KC_NAMESPACE_PREFIX}}keycloak
+      - KUBECONFIG="{{.ISPN_DIR}}/.task/kubecfg/{{.ROSA_CLUSTER_NAME}}" oc expose service/jmxrestclient -n {{.KC_NAMESPACE_PREFIX}}keycloak
+      - KUBECONFIG="{{.ISPN_DIR}}/.task/kubecfg/{{.ROSA_CLUSTER_NAME}}" oc delete bc jmxrestclient -n {{.KC_NAMESPACE_PREFIX}}keycloak
+    preconditions:
+      - test -f "{{.ISPN_DIR}}/.task/kubecfg/{{.ROSA_CLUSTER_NAME}}"
+
+  delete-jmx-rest-client-app:
+    internal: true
+    requires:
+      vars:
+        - ROSA_CLUSTER_NAME
+    cmds:
+      - echo "Delete JMX Rest Client application"
+      - KUBECONFIG="{{.ISPN_DIR}}/.task/kubecfg/{{.ROSA_CLUSTER_NAME}}" oc delete all --selector app=jmxrestclient -n {{.KC_NAMESPACE_PREFIX}}keycloak
     preconditions:
       - test -f "{{.ISPN_DIR}}/.task/kubecfg/{{.ROSA_CLUSTER_NAME}}"
