@@ -1,8 +1,8 @@
 name: ROSA Daily Scheduled Run
 
 on:
-  schedule:
-    - cron: '0 5 * * 1-5' # Runs At 05:00 UTC on every day-of-week from Monday through Friday.
+#  schedule:
+#    - cron: '0 5 * * 1-5' # Runs At 05:00 UTC on every day-of-week from Monday through Friday.
   workflow_dispatch:
 
 # env:
@@ -15,6 +15,7 @@ jobs:
     uses: ./.github/workflows/rosa-multi-az-cluster-create.yml
     with:
       clusterPrefix: gh-keycloak # ${{ env.CLUSTER_PREFIX }} -- unfortunately 'env.' doesn't work here
+      createCluster: false
     secrets: inherit
 
   run-functional-tests:
@@ -29,6 +30,7 @@ jobs:
     uses: ./.github/workflows/rosa-scaling-benchmark.yml
     with:
       clusterName: gh-keycloak-a # ${{ env.CLUSTER_PREFIX }}-a -- unfortunately 'env.' doesn't work here ${{ env.CLUSTER_PREFIX }}-a
+      measurement: 300
     secrets: inherit
 
   cluster-undeploy:
@@ -54,4 +56,5 @@ jobs:
     uses: ./.github/workflows/rosa-scaling-benchmark.yml
     with:
       clusterName: gh-keycloak-a # ${{ env.CLUSTER_PREFIX }}-a -- unfortunately 'env.' doesn't work here ${{ env.CLUSTER_PREFIX }}-a
+      measurement: 300
     secrets: inherit
