@@ -150,7 +150,7 @@ jobs:
 
       - name: Allow cluster to scale
         if: ${{ !inputs.skipCreateDeployment }}
-        run: rosa edit machinepool -c ${{ inputs.clusterName }} --min-replicas 3 scaling
+        run: rosa edit machinepool -c ${{ inputs.clusterName }} --min-replicas 3 --max-replicas 10 scaling
 
       - name: Create Keycloak deployment
         if: ${{ !inputs.skipCreateDeployment }}
